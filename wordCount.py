@@ -17,10 +17,10 @@ def wordCount(inputfile):
 
     # Read the whole text.
     text = open(path.join(d, "tokenized", inputfile)).read().split(' ')
-    commonWords = nltk.FreqDist(text).most_common(50)
+    commonWords = nltk.FreqDist(text).items()
     with open(path.join(d, "rank", inputfile), "w+") as rankFile:
         for word, count in commonWords:
-            rankFile.write("%s %d\n" % (word, count))
+            rankFile.write("%s (%d)\n" % (word, count))
 
 
 def main(argv):

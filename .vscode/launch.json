@@ -9,10 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "args": [
-        "-i debateAndradeTalvi/ambos.txt",
-        "-o debateAndradeTalvi/ambos.png",
-      ],
+      "args": ["-i andrade.txt", "-o andrade3.png", "-m andrade3.png"],
       "console": "integratedTerminal"
     }
   ]

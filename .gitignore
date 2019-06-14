@@ -1,4 +1,5 @@
 __pycache__
+rank/*
 text/*
 tokenized/*
 wordcloud/*

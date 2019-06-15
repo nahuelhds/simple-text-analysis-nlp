@@ -2,6 +2,13 @@
 
 Proyecto Python utilizado para realizar Procesamiento de Lenguaje Natural (NLP por sus siglas en inglés) de forma básica mediante la librería NLTK.
 
+## Dependencias
+
+Para ejecutar estos scripts es necesario tener instaladas estas librerías.
+
+- [NLTK](https://www.nltk.org/install.html)
+- [word_cloud](https://amueller.github.io/word_cloud/)
+
 ## Tokenización
 
 El procesamiento de texto realiza las siguientes acciones:

@@ -5,11 +5,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Archivo actual",
+      "name": "Parse",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
-      "args": ["-i andrade.txt", "-o andrade3.png", "-m andrade3.png"],
+      "program": "${workspaceFolder}/parse.py",
+      "args": ["-i andrade.txt", "-o andrade.txt"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "WordCount",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/wordCount.py",
+      "args": ["-i andrade.txt", "-o andrade-100.txt", "-r 100"],
       "console": "integratedTerminal"
     }
   ]

@@ -1,2 +1,7 @@
 __pycache__
+input/*
+output/*
+mask/*
+wordcloud/*
+wordcount/*
 !.gitkeep

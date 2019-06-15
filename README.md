@@ -16,10 +16,20 @@ El procesamiento de texto realiza las siguientes acciones:
 
 Se puede ver el trabajo realizado con este proyecto en la carpeta [examples/andrade-vs-talvi](./examples/andrade-vs-talvi).
 
-- En `wordcloud` las últimas nubes generadas con las siluetas de cada precandidato
 - En `wordcount`
   - El conteo de palabras en los archivos, ya sea reducidas a su raíz `-raiz.txt` o no.
   - Ese mismo conteo ordenado a modo ranking en `-rank.txt`.
+- En `wordcloud` las últimas nubes generadas con las siluetas de cada precandidato
+
+Las nubes de palabras quedan de la siguiente manera:
+
+### Oscar Andrade
+
+![Nube de palabras de Óscar Andrade](./examples/andrade-vs-talvi/wordcloud/andrade.png)
+
+### Ernesto Talvi
+
+![Nube de palabras de Ernesto Talvi](./examples/andrade-vs-talvi/wordcloud/talvi.png)
 
 ## Ejemplo de uso
 

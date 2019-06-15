@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
 
-def wordCount(inputfile, outputfile, rank=0):
+def wordCount(inputfile, outputfile, rank=False):
     # get data directory (using getcwd() is needed to support running example in generated IPython notebook)
     d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
@@ -19,10 +19,10 @@ def wordCount(inputfile, outputfile, rank=0):
     text = open(path.join(d, "output", inputfile)).read().split(' ')
     words = nltk.FreqDist(text)
 
-    if(rank == 0):
-        words = words.items()
+    if(rank == False):
+        words = sorted(words.items())
     else:
-        words = words.most_common(rank)
+        words = words.most_common()
 
     with open(path.join(d, "wordcount", outputfile), "w+") as output:
         for word, count in words:
@@ -32,12 +32,12 @@ def wordCount(inputfile, outputfile, rank=0):
 def main(argv):
     input = ''
     output = ''
-    rank = 0
+    rank = False
     try:
-        opts, args = getopt.getopt(argv, "hi:o:r:", [
+        opts, args = getopt.getopt(argv, "hi:o:r", [
             "input=",
             "output=",
-            "rank="
+            "rank"
         ])
     except getopt.GetoptError:
         print('test.py -i <inputfile>')
@@ -54,7 +54,7 @@ def main(argv):
             elif opt in ("-o", "--output"):
                 output = arg.strip()
             elif opt in ('-r', '--rank'):
-                rank = int(arg.strip())
+                rank = True
 
         print(wordCount(input, output, rank))
 

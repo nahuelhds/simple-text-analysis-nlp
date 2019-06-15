@@ -16,7 +16,7 @@ def makeWordCloud(inputfile, maskfile, outputfile):
     d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
     # Read the whole text.
-    text = open(path.join(d, "tokenized", inputfile)).read()
+    text = open(path.join(d, "output", inputfile)).read()
 
     # read the mask image
     # taken from

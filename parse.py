@@ -1,27 +1,48 @@
 #!/usr/bin/python3
-from nltk.stem.porter import PorterStemmer
-from nltk.tokenize import word_tokenize
 import string
 import os
 import sys
 import getopt
 
 from os import path
-from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.stem.porter import PorterStemmer
+from nltk.tokenize import sent_tokenize, word_tokenize
 
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
 
-def createTokenizedFile(input, output, stem=False):
+def createTokenizedFile(input, output, stem=False, sentiment=False):
     inputFilename = path.join(dir, "input", input)
     outputFilename = path.join(dir, "output", output)
+    sentimentFilename = path.join(dir, "sentiment", output + ".csv")
 
     inputFile = open(inputFilename, "r")
     text = inputFile.read()
     inputFile.close()
 
-    # PROCESAMIENTO DEL TEXTO
+    # ANALISIS DE SENTIMIENTOS DE CADA ORACION
+    # Algoritmo inspirado en https://github.com/Bharat123rox/sentiment-analysis-nltk/
+    if(sentiment):
+        sentences = sent_tokenize(text)
+        sentimentAnalizer = SentimentIntensityAnalyzer()
+
+        sentimentFile = open(sentimentFilename, "w+")
+
+        sentimentFile.write("POSITIVE;NEGATIVE;NEUTRAL;COMPOUND;SENTENCE\n")
+        with sentimentFile as sentimentFile:
+            for sentence in sentences:
+                score = sentimentAnalizer.polarity_scores(sentence)
+                sentimentFile.write("%s;%s;%s;%s;%s\n" % (
+                    score['pos'],
+                    score['neg'],
+                    score['neu'],
+                    score['compound'],
+                    sentence,
+                ))
+
+    # PROCESAMIENTO DE LAS PALABRAS
     # Ver: https://machinelearningmastery.com/clean-text-machine-learning-python/
 
     # 1. Separo en palabras (tokenizar) y las paso a minusculas
@@ -51,13 +72,15 @@ def createTokenizedFile(input, output, stem=False):
 
 def main(argv):
     input = ''
-    outputfile = ''
+    ouput = ''
     stem = False
+    sentiment = False
     try:
-        opts, args = getopt.getopt(argv, "hi:o:s", [
+        opts, args = getopt.getopt(argv, "hi:o:r:s", [
             "input=",
             "output=",
-            "stem"
+            "stem",
+            "sentiment"
         ])
     except getopt.GetoptError:
         print('test.py -i <inputfile>')
@@ -67,16 +90,23 @@ def main(argv):
     else:
         for opt, arg in opts:
             if opt == '-h':
-                print('test.py -i <inputfile>')
+                print('test.py -i <input> -o <output> --root --sentiment')
                 sys.exit()
             elif opt in ("-i", "--input"):
                 input = arg.strip()
             elif opt in ("-o", "--output"):
-                outputfile = arg.strip()
-            elif opt in ('-s', '--stem'):
+                ouput = arg.strip()
+            elif opt in ('-r', '--root'):
                 stem = True
+            elif opt in ('-s', '--sentiment'):
+                sentiment = True
 
-        tokenizedFilename = createTokenizedFile(input, outputfile, stem)
+        tokenizedFilename = createTokenizedFile(
+            input,
+            ouput,
+            stem,
+            sentiment
+        )
         return tokenizedFilename
 
 

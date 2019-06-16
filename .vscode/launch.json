@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/parse.py",
-      "args": ["-i andrade.txt", "-o andrade.txt"],
+      "args": ["-i andrade.txt", "-o andrade.txt", "-s"],
       "console": "integratedTerminal"
     },
     {

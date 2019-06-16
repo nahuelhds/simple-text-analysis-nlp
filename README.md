@@ -46,8 +46,13 @@ Las nubes de palabras quedan de la siguiente manera:
 # Genera el archivo final en la carpeta `ouput`
 python3 parse.py -i andrade.txt -o andrade.txt
 
-# Si se queire obtener las raíces de las palabras unicamente se utiliza `stem`
-# python3 parse.py -i andrade.txt -o andrade.txt --stem
+# Si se quiere obtener las raíces de las palabras unicamente
+# se utiliza el parametro `--root|-r`
+# python3 parse.py -i andrade.txt -o andrade.txt -r
+
+# Si se quiere realizar el analisis de sentimiento de las frases
+# se utiliza el parametro `--sentiment|-s`
+# python3 parse.py -i andrade.txt -o andrade.txt -s
 
 # Armar la nube de palabras
 # Busca el input en la carpeta `ouput` generada con parse.py

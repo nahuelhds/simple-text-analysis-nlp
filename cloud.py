@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 from wordcloud import WordCloud
 
 
-def makeWordCloud(inputfile, maskfile, outputfile):
+def makeWordCloud(inputfile, outputfile, maskfile=''):
     # get data directory (using getcwd() is needed to support running example in generated IPython notebook)
     d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
@@ -21,12 +21,24 @@ def makeWordCloud(inputfile, maskfile, outputfile):
     # read the mask image
     # taken from
     # http://www.stencilry.org/stencils/movies/alice%20in%20wonderland/255fk.jpg
-    image_mask = np.array(Image.open(path.join(d, "mask", maskfile)))
+    image_mask = None
+    width = 800
+    height = 800
+    if(maskfile != ''):
+        image_mask = np.array(Image.open(path.join(d, "mask", maskfile)))
 
     stopWords = set(stopwords.words('spanish'))
 
-    wc = WordCloud(background_color="white", max_words=2000, mask=image_mask,
-                   stopwords=stopWords, contour_width=3, contour_color='steelblue')
+    wc = WordCloud(
+        background_color="white",
+        max_words=2000,
+        mask=image_mask,
+        stopwords=stopWords,
+        contour_width=3,
+        contour_color='steelblue',
+        width=width,
+        height=height
+    )
 
     # generate word cloud
     wc.generate(text)
@@ -36,7 +48,7 @@ def makeWordCloud(inputfile, maskfile, outputfile):
 
 
 def printHelp():
-    print('test.py -i <inputfile> -m <maskfile> -o <outputfile>')
+    print('test.py -i <inputfile> -o <outputfile> -m <maskfile>')
 
 
 def main(argv):
@@ -45,9 +57,9 @@ def main(argv):
     outputfile = ''
     try:
         opts, args = getopt.getopt(argv, "hi:m:o:", [
-            "inputfile=",
-            "maskfile=",
-            "output=file"
+            "input=",
+            "output="
+            "mask=",
         ])
     except getopt.GetoptError:
         printHelp()
@@ -61,14 +73,14 @@ def main(argv):
             if opt == '-h':
                 printHelp()
                 sys.exit()
-            elif opt in ("-i", "--inputfile"):
+            elif opt in ("-i", "--input"):
                 inputfile = arg.strip()
-            elif opt in ("-m", "--maskfile"):
-                maskfile = arg.strip()
-            elif opt in ("-o", "--outputfile"):
+            elif opt in ("-o", "--output"):
                 outputfile = arg.strip()
+            elif opt in ("-m", "--mask"):
+                maskfile = arg.strip()
 
-        return makeWordCloud(inputfile, maskfile, outputfile)
+        return makeWordCloud(inputfile, outputfile, maskfile)
 
 
 if __name__ == "__main__":

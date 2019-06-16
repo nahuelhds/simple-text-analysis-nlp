@@ -9,8 +9,30 @@ from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
+from decimal import Decimal
 
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+
+
+def calculateCompoundRank(compound):
+    decimalCompound = Decimal(compound)
+    if(decimalCompound.compare(Decimal(0.75)) == 1):
+        return 4
+    elif(decimalCompound.compare(Decimal(0.5)) == 1):
+        return 3
+    elif(decimalCompound.compare(Decimal(0.25)) == 1):
+        return 2
+    elif(decimalCompound.compare(Decimal(0)) == 1):
+        return 1
+    elif(decimalCompound.compare(Decimal(0)) == 0):
+        return 0
+    elif(decimalCompound.compare(Decimal(-0.25)) == 1):
+        return -1
+    elif(decimalCompound.compare(Decimal(-0.5)) == 1):
+        return -2
+    elif(decimalCompound.compare(Decimal(-0.75)) == 1):
+        return -3
+    return -4
 
 
 def createTokenizedFile(input, output, stem=False, sentiment=False):
@@ -23,22 +45,25 @@ def createTokenizedFile(input, output, stem=False, sentiment=False):
     inputFile.close()
 
     # ANALISIS DE SENTIMIENTOS DE CADA ORACION
-    # Algoritmo inspirado en https://github.com/Bharat123rox/sentiment-analysis-nltk/
+    # Ver explicación del algoritmo VADER utilizado por NLTK
+    # https://github.com/cjhutto/vaderSentiment
     if(sentiment):
         sentences = sent_tokenize(text)
         sentimentAnalizer = SentimentIntensityAnalyzer()
 
         sentimentFile = open(sentimentFilename, "w+")
 
-        sentimentFile.write("POSITIVE;NEGATIVE;NEUTRAL;COMPOUND;SENTENCE\n")
+        sentimentFile.write(
+            "TYPE,COMPOUND,POSITIVE,NEGATIVE,NEUTRAL,SENTENCE\n")
         with sentimentFile as sentimentFile:
             for sentence in sentences:
                 score = sentimentAnalizer.polarity_scores(sentence)
-                sentimentFile.write("%s;%s;%s;%s;%s\n" % (
+                sentimentFile.write("%d,%f,%f,%f,%f,\"%s\"\n" % (
+                    calculateCompoundRank(score['compound']),
+                    score['compound'],
                     score['pos'],
                     score['neg'],
                     score['neu'],
-                    score['compound'],
                     sentence,
                 ))
 

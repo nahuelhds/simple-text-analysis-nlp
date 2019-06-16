@@ -4,12 +4,12 @@ import os
 import sys
 import getopt
 
-from os import path
+from decimal import Decimal
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
-from decimal import Decimal
+from os import path
 
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 

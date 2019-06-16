@@ -3,6 +3,7 @@ input/*
 mask/*
 output/*
 sentiment/*
+summary/*
 wordcloud/*
 wordcount/*
 !.gitkeep

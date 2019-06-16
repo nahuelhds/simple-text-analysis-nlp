@@ -11,12 +11,12 @@ from nltk.corpus import stopwords
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
 
-def wordCount(inputfile, outputfile, rank=False):
+def wordCount(inputfilename, outputfilename, rank=False):
     # get data directory (using getcwd() is needed to support running example in generated IPython notebook)
     d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
     # Read the whole text.
-    text = open(path.join(d, "output", inputfile)).read().split(' ')
+    text = open(path.join(d, "output", inputfilename)).read().split(' ')
     words = nltk.FreqDist(text)
 
     if(rank == False):
@@ -24,9 +24,11 @@ def wordCount(inputfile, outputfile, rank=False):
     else:
         words = words.most_common()
 
-    with open(path.join(d, "wordcount", outputfile), "w+") as output:
+    outputfile = open(path.join(d, "wordcount", outputfilename), "w+")
+    outputfile.write("WORD,COUNT\n")
+    with outputfile as outputfile:
         for word, count in words:
-            output.write("%s (%d)\n" % (word, count))
+            outputfile.write("%s,%d\n" % (word, count))
 
 
 def main(argv):

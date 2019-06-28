@@ -58,7 +58,7 @@ def main(argv):
             elif opt in ('-r', '--rank'):
                 rank = True
 
-        print(wordCount(input, output, rank))
+        wordCount(input, output, rank)
 
 
 if __name__ == "__main__":

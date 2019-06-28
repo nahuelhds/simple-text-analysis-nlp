@@ -11,15 +11,17 @@ from cloud import makeWordCloud
 from sentiment import analyzeSentiment
 
 def printCmd():
-    print("all.py -i <inputfile> -m <maskfile>")
+    print("all.py -i <inputfile> -m <maskfile> -r|--root")
 
 def main(argv):
     input = None
     mask = None
+    root = False
     try:
-        opts, args = getopt.getopt(argv, "hi:m:", [
+        opts, args = getopt.getopt(argv, "hi:m:r", [
             "input=",
             "mask=",
+            "root",
         ])
     except getopt.GetoptError:
         printCmd()
@@ -36,6 +38,8 @@ def main(argv):
                 input = arg.strip()
             elif opt in ("-m", "--mask"):
                 mask = arg.strip()
+            elif opt in ('-r', '--root'):
+                root = True
 
         basename = path.basename(path.splitext(input)[0])
 
@@ -44,40 +48,45 @@ def main(argv):
         else:
             maskCloud = mask
 
-        # Tokenization
-        tokenizedFile = createTokenizedFile(
-            input,
-            False
-        )
-
-        # Root
-        tokenizedRootFile = createTokenizedFile(
-            input,
-            True
-        )
+        files = []
+        
         # Sentiment
         analyzeSentiment(
             input,
         )
 
-        files = [tokenizedFile, tokenizedRootFile]
+        # Tokenization para generacion de conteos y nubes
+        tokenizedFile = createTokenizedFile(
+            input,
+            False
+        )
+
+        files.append(tokenizedFile)
+
+        if(root == True):
+            # Root
+            tokenizedRootFile = createTokenizedFile(
+                input,
+                True
+            )
+            files.append(tokenizedRootFile)
 
         for file in files:
 
-            # Count
+            # Conteo
             wordCount(file, False)
 
-            # Count ranked
+            # Conteo ordenado de mayor a menor
             wordCount(file, True)
 
-            # Cloud without mask
+            # Nube
             makeWordCloud(file)
 
             if path.exists(maskCloud):
-                # Cloud with mask
+                # Nube con mascara
                 makeWordCloud(file, maskCloud)
 
-        # Text summarization
+        # Sumarizacion
         textSummarization(input)
 
 

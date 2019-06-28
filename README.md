@@ -73,6 +73,9 @@ python3 count.py -i andrade.txt -o andrade-rank.txt --rank
 # Sumarizacion de texto
 # Frases destacadas
 python3 summary.py -i andrade.txt -o andrade.txt
+
+# ONE-LINE-COMMAND
+FILE=andrade && python3 parse.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE-rank.txt --rank && python3 summary.py -i $FILE.txt -o $FILE.txt && python3 cloud.py -i $FILE.txt -o $FILE.png
 ```
 
 ## Pedidos y sugerencias

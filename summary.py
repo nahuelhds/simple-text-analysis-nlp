@@ -82,7 +82,7 @@ def textrank(sentences, top_n=5, stopwords=None):
     return summary
 
 
-def textrankFromText(input):
+def textSummarization(input):
     inputFilename = path.join(dir, input)
     basename = path.basename(path.splitext(input)[0])
     outputFilename = path.join(dir, "output", basename, "summary.txt")
@@ -130,7 +130,7 @@ def main(argv):
             elif opt in ("-i", "--input"):
                 input = arg.strip()
 
-        return textrankFromText(input)
+        return textSummarization(input)
 
 
 if __name__ == "__main__":

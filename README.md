@@ -44,35 +44,34 @@ Las nubes de palabras quedan de la siguiente manera:
 # Tokenizar el texto.
 # Busca el input en la carpeta `input`
 # Genera el archivo final en la carpeta `ouput`
-python3 parse.py -i andrade.txt -o andrade.txt
+python3 parse.py -i input/andrade.txt
 
 # Si se quiere obtener las raíces de las palabras unicamente
 # se utiliza el parametro `--root|-r`
-python3 parse.py -i andrade.txt -o andrade-root.txt --root
+python3 parse.py -i input/andrade.txt --root
 
 # Si se quiere realizar el analisis de sentimiento de las frases
-# se utiliza el parametro `--sentiment|-s`
-python3 parse.py -i andrade.txt -o andrade.txt --sentiment
-
-# Armar la nube de palabras
-# Busca el input en la carpeta `ouput` generada con parse.py
-# Genera el archivo final en la carpeta `worcloud`
-# La máscara debe existir en la carepta `mask`
-python3 cloud.py -i andrade.txt -o andrade.png -m andrade.png
-
-# Conteo de palabras ordenadas alfabeticamente
-# Busca el input en la carpeta `ouput` generada con parse.py
-# Genera el archivo final en la carpeta `worcdount`
-python3 count.py -i andrade.txt -o andrade.txt
-
-# Ranking de palabras mas usadas
-# Busca el input en la carpeta `ouput` generada con parse.py
-# Genera el archivo final en la carpeta `worcdount`
-python3 count.py -i andrade.txt -o andrade-rank.txt --rank
+python3 sentiment.py -i input/andrade.txt
 
 # Sumarizacion de texto
 # Frases destacadas
-python3 summary.py -i andrade.txt -o andrade.txt
+python3 summary.py -i input/andrade.txt
+
+# Conteo de palabras ordenadas alfabeticamente
+# Busca el input en la carpeta `ouput` generada con parse.py
+python3 count.py -i output/andrade.txt
+
+# Ranking de palabras mas usadas
+# Busca el input en la carpeta `ouput` generada con parse.py
+python3 count.py -i output/andrade.txt --rank
+
+# Armar la nube de palabras
+# Busca el input en la carpeta `ouput` generada con parse.py
+python3 cloud.py -i output/andrade.txt
+
+# Armar la nube de palabras utilizando una mascara
+# Busca el input en la carpeta `ouput` generada con parse.py
+python3 cloud.py -i output/andrade.txt -m input/andrade.png
 
 # ONE-LINE-COMMAND
 FILE=andrade && python3 parse.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE-rank.txt --rank && python3 summary.py -i $FILE.txt -o $FILE.txt && python3 cloud.py -i $FILE.txt -o $FILE.png

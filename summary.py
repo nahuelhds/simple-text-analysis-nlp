@@ -1,5 +1,6 @@
 # Source: https://nlpforhackers.io/textrank-text-summarization/
 
+import os
 import numpy as np
 import sys
 import getopt
@@ -81,15 +82,23 @@ def textrank(sentences, top_n=5, stopwords=None):
     return summary
 
 
-def textrankFromText(input, output):
-    inputFilename = path.join(dir, "input", input)
-    outputFilename = path.join(dir, "summary", output)
+def textrankFromText(input):
+    inputFilename = path.join(dir, input)
+    basename = path.basename(path.splitext(input)[0])
+    outputFilename = path.join(dir, "output", basename, "summary.txt")
 
     inputFile = open(inputFilename, "r")
     text = inputFile.read()
     inputFile.close()
 
     sentences = sent_tokenize(text)
+
+    # Creo la carpeta si no existe
+    outputFolder = os.path.dirname(outputFilename)
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
+
+    # Genero el archivo
     outputFile = open(outputFilename, "w+")
 
     with outputFile as outputFile:
@@ -97,30 +106,31 @@ def textrankFromText(input, output):
             outputFile.write("%s. %s\n" % ((idx + 1), sentence))
 
 
+def printCmd():
+    print('sentiment.py -i <input>')
+
+
 def main(argv):
     input = ''
-    ouput = ''
     try:
-        opts, args = getopt.getopt(argv, "hi:o:", [
+        opts, args = getopt.getopt(argv, "hi:", [
             "input=",
-            "output=",
         ])
     except getopt.GetoptError:
-        print('test.py -i <input> -o <output>')
+        printCmd()
         sys.exit(2)
     if len(opts) < 1:
-        print('test.py -i <input> -o <output>')
+        printCmd()
+        sys.exit()
     else:
         for opt, arg in opts:
             if opt == '-h':
-                print('test.py -i <input> -o <output>')
+                printCmd()
                 sys.exit()
             elif opt in ("-i", "--input"):
                 input = arg.strip()
-            elif opt in ("-o", "--output"):
-                output = arg.strip()
 
-        return textrankFromText(input, output)
+        return textrankFromText(input)
 
 
 if __name__ == "__main__":

@@ -10,13 +10,12 @@ from PIL import Image
 from nltk.corpus import stopwords
 from wordcloud import WordCloud
 
+dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
-def makeWordCloud(inputfile, outputfile, maskfile=''):
-    # get data directory (using getcwd() is needed to support running example in generated IPython notebook)
-    d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
+def makeWordCloud(inputfile, maskfile=None):
     # Read the whole text.
-    text = open(path.join(d, "output", inputfile)).read()
+    text = open(path.join(dir, inputfile)).read()
 
     # read the mask image
     # taken from
@@ -24,8 +23,8 @@ def makeWordCloud(inputfile, outputfile, maskfile=''):
     image_mask = None
     width = 800
     height = 800
-    if(maskfile != ''):
-        image_mask = np.array(Image.open(path.join(d, "mask", maskfile)))
+    if(maskfile is not None):
+        image_mask = np.array(Image.open(path.join(dir, maskfile)))
 
     stopWords = set(stopwords.words('spanish'))
 
@@ -44,43 +43,51 @@ def makeWordCloud(inputfile, outputfile, maskfile=''):
     wc.generate(text)
 
     # store to file
-    wc.to_file(path.join(d, "wordcloud", outputfile))
+    basename = path.basename(path.splitext(inputfile)[0])
+    
+    if(maskfile is None):
+        filename = "cloud.png"
+    else :
+        filename = "cloud-mask.png"
+    
+    outputFilename = path.join(dir, "output", basename, filename)
+    outputFolder = os.path.dirname(outputFilename)
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
+
+    wc.to_file(outputFilename)
 
 
-def printHelp():
-    print('test.py -i <inputfile> -o <outputfile> -m <maskfile>')
+def printCmd():
+    print('cloud.py -i <input> -m <mask>')
 
 
 def main(argv):
     inputfile = ''
-    maskfile = ''
-    outputfile = ''
+    maskfile = None
     try:
-        opts, args = getopt.getopt(argv, "hi:m:o:", [
+        opts, args = getopt.getopt(argv, "hi:m:", [
             "input=",
-            "output="
             "mask=",
         ])
     except getopt.GetoptError:
-        printHelp()
+        printCmd()
         sys.exit(2)
 
     if len(opts) < 1:
-        printHelp()
+        printCmd()
         sys.exit()
     else:
         for opt, arg in opts:
             if opt == '-h':
-                printHelp()
+                printCmd()
                 sys.exit()
             elif opt in ("-i", "--input"):
                 inputfile = arg.strip()
-            elif opt in ("-o", "--output"):
-                outputfile = arg.strip()
             elif opt in ("-m", "--mask"):
                 maskfile = arg.strip()
 
-        return makeWordCloud(inputfile, outputfile, maskfile)
+        return makeWordCloud(inputfile, maskfile)
 
 
 if __name__ == "__main__":

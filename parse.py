@@ -6,9 +6,8 @@ import getopt
 
 from decimal import Decimal
 from nltk.corpus import stopwords
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.stem.porter import PorterStemmer
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
 from os import path
 
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
@@ -35,37 +34,20 @@ def calculateCompoundRank(compound):
     return -4
 
 
-def createTokenizedFile(input, output, root=False, sentiment=False):
-    inputFilename = path.join(dir, "input", input)
-    outputFilename = path.join(dir, "output", output)
-    sentimentFilename = path.join(dir, "sentiment", output + ".csv")
+def createTokenizedFile(input, root=False):
+    inputFilename = path.join(dir, input)
+    basename = path.basename(path.splitext(input)[0])
+
+    if(root == True):
+        filename = basename + "-root.txt"
+    else :
+        filename = basename + ".txt"
+
+    outputFilename = path.join(dir, "output", filename)
 
     inputFile = open(inputFilename, "r")
     text = inputFile.read()
     inputFile.close()
-
-    # ANALISIS DE SENTIMIENTOS DE CADA ORACION
-    # Ver explicación del algoritmo VADER utilizado por NLTK
-    # https://github.com/cjhutto/vaderSentiment
-    if(sentiment):
-        sentences = sent_tokenize(text)
-        sentimentAnalizer = SentimentIntensityAnalyzer()
-
-        sentimentFile = open(sentimentFilename, "w+")
-
-        sentimentFile.write(
-            "TYPE,COMPOUND,POSITIVE,NEGATIVE,NEUTRAL,SENTENCE\n")
-        with sentimentFile as sentimentFile:
-            for sentence in sentences:
-                score = sentimentAnalizer.polarity_scores(sentence)
-                sentimentFile.write("%d,%f,%f,%f,%f,\"%s\"\n" % (
-                    calculateCompoundRank(score['compound']),
-                    score['compound'],
-                    score['pos'],
-                    score['neg'],
-                    score['neu'],
-                    sentence,
-                ))
 
     # PROCESAMIENTO DE LAS PALABRAS
     # Ver: https://machinelearningmastery.com/clean-text-machine-learning-python/
@@ -94,43 +76,37 @@ def createTokenizedFile(input, output, root=False, sentiment=False):
     outputFile.write(outputText)
     return outputFilename
 
+def printCmd():
+    print('parse.py -i <input> --root')
 
 def main(argv):
     input = ''
-    ouput = ''
     root = False
-    sentiment = False
     try:
-        opts, args = getopt.getopt(argv, "hi:o:r:s", [
+        opts, args = getopt.getopt(argv, "hi:r", [
             "input=",
-            "output=",
             "root",
-            "sentiment"
         ])
     except getopt.GetoptError:
-        print('test.py -i <inputfile>')
+        printCmd()
         sys.exit(2)
+
     if len(opts) < 1:
-        print('test.py -i <inputfile>')
+        printCmd()
+        sys.exit()
     else:
         for opt, arg in opts:
             if opt == '-h':
-                print('test.py -i <input> -o <output> --root --sentiment')
+                printCmd()
                 sys.exit()
             elif opt in ("-i", "--input"):
                 input = arg.strip()
-            elif opt in ("-o", "--output"):
-                ouput = arg.strip()
             elif opt in ('-r', '--root'):
                 root = True
-            elif opt in ('-s', '--sentiment'):
-                sentiment = True
 
         tokenizedFilename = createTokenizedFile(
             input,
-            ouput,
             root,
-            sentiment
         )
         return tokenizedFilename
 

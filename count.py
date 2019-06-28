@@ -11,12 +11,9 @@ from nltk.corpus import stopwords
 dir = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
 
-def wordCount(inputfilename, outputfilename, rank=False):
-    # get data directory (using getcwd() is needed to support running example in generated IPython notebook)
-    d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
-
+def wordCount(inputfilename, rank=False):
     # Read the whole text.
-    text = open(path.join(d, "output", inputfilename)).read().split(' ')
+    text = open(path.join(dir, inputfilename)).read().split(' ')
     words = nltk.FreqDist(text)
 
     if(rank == False):
@@ -24,41 +21,54 @@ def wordCount(inputfilename, outputfilename, rank=False):
     else:
         words = words.most_common()
 
-    outputfile = open(path.join(d, "wordcount", outputfilename), "w+")
+    basename = path.basename(path.splitext(inputfilename)[0])
+    if(rank is True):
+        filename = "count-rank.txt"
+    else:
+        filename = "count.txt"
+    outputfilename = path.join(dir, "output", basename, filename)
+
+    outputfolder = os.path.dirname(outputfilename)
+    if not os.path.exists(outputfolder):
+        os.makedirs(outputfolder)
+
+    outputfile = open(path.join(dir, outputfilename), "w+")
+
     outputfile.write("WORD,COUNT\n")
     with outputfile as outputfile:
         for word, count in words:
             outputfile.write("%s,%d\n" % (word, count))
 
 
+def printCmd():
+    print('count.py -i <inputfile> --rank')
+
+
 def main(argv):
     input = ''
-    output = ''
     rank = False
     try:
-        opts, args = getopt.getopt(argv, "hi:o:r", [
+        opts, args = getopt.getopt(argv, "hi:r", [
             "input=",
-            "output=",
             "rank"
         ])
     except getopt.GetoptError:
-        print('test.py -i <inputfile>')
+        printCmd()
         sys.exit(2)
     if len(opts) < 1:
-        print('test.py -i <inputfile>')
+        printCmd()
+        sys.exit()
     else:
         for opt, arg in opts:
             if opt == '-h':
-                print('test.py -i <inputfile>')
+                printCmd()
                 sys.exit()
             elif opt in ("-i", "--input"):
                 input = arg.strip()
-            elif opt in ("-o", "--output"):
-                output = arg.strip()
             elif opt in ('-r', '--rank'):
                 rank = True
 
-        wordCount(input, output, rank)
+        wordCount(input, rank)
 
 
 if __name__ == "__main__":

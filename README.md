@@ -48,11 +48,11 @@ python3 parse.py -i andrade.txt -o andrade.txt
 
 # Si se quiere obtener las raíces de las palabras unicamente
 # se utiliza el parametro `--root|-r`
-# python3 parse.py -i andrade.txt -o andrade.txt -r
+python3 parse.py -i andrade.txt -o andrade-root.txt --root
 
 # Si se quiere realizar el analisis de sentimiento de las frases
 # se utiliza el parametro `--sentiment|-s`
-# python3 parse.py -i andrade.txt -o andrade.txt -s
+python3 parse.py -i andrade.txt -o andrade.txt --sentiment
 
 # Armar la nube de palabras
 # Busca el input en la carpeta `ouput` generada con parse.py
@@ -69,6 +69,10 @@ python3 count.py -i andrade.txt -o andrade.txt
 # Busca el input en la carpeta `ouput` generada con parse.py
 # Genera el archivo final en la carpeta `worcdount`
 python3 count.py -i andrade.txt -o andrade-rank.txt --rank
+
+# Sumarizacion de texto
+# Frases destacadas
+python3 summary.py -i andrade.txt -o andrade.txt
 ```
 
 ## Pedidos y sugerencias

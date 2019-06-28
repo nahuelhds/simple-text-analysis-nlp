@@ -35,7 +35,7 @@ def calculateCompoundRank(compound):
     return -4
 
 
-def createTokenizedFile(input, output, stem=False, sentiment=False):
+def createTokenizedFile(input, output, root=False, sentiment=False):
     inputFilename = path.join(dir, "input", input)
     outputFilename = path.join(dir, "output", output)
     sentimentFilename = path.join(dir, "sentiment", output + ".csv")
@@ -75,7 +75,7 @@ def createTokenizedFile(input, output, stem=False, sentiment=False):
     tokens = [w.lower() for w in tokens]
 
     # 2. Reduccion de palabras a su raíz lingüística
-    if(stem):
+    if(root):
         porter = PorterStemmer()
         tokens = [porter.stem(word) for word in tokens]
 
@@ -98,13 +98,13 @@ def createTokenizedFile(input, output, stem=False, sentiment=False):
 def main(argv):
     input = ''
     ouput = ''
-    stem = False
+    root = False
     sentiment = False
     try:
         opts, args = getopt.getopt(argv, "hi:o:r:s", [
             "input=",
             "output=",
-            "stem",
+            "root",
             "sentiment"
         ])
     except getopt.GetoptError:
@@ -122,14 +122,14 @@ def main(argv):
             elif opt in ("-o", "--output"):
                 ouput = arg.strip()
             elif opt in ('-r', '--root'):
-                stem = True
+                root = True
             elif opt in ('-s', '--sentiment'):
                 sentiment = True
 
         tokenizedFilename = createTokenizedFile(
             input,
             ouput,
-            stem,
+            root,
             sentiment
         )
         return tokenizedFilename

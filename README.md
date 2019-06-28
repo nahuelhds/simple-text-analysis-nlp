@@ -41,40 +41,35 @@ Las nubes de palabras quedan de la siguiente manera:
 ## Ejemplo de uso
 
 ```bash
-# Tokenizar el texto.
-# Busca el input en la carpeta `input`
-# Genera el archivo final en la carpeta `ouput`
-python3 parse.py -i input/andrade.txt
-
-# Si se quiere obtener las raíces de las palabras unicamente
-# se utiliza el parametro `--root|-r`
-python3 parse.py -i input/andrade.txt --root
-
-# Si se quiere realizar el analisis de sentimiento de las frases
+# ANALISIS DE SENTIMIENTO
 python3 sentiment.py -i input/andrade.txt
 
-# Sumarizacion de texto
+# SUMARIZACION
 # Frases destacadas
 python3 summary.py -i input/andrade.txt
 
-# Conteo de palabras ordenadas alfabeticamente
-# Busca el input en la carpeta `ouput` generada con parse.py
-python3 count.py -i output/andrade.txt
+# TOKENIZACION
+# Busca el input en la carpeta `input`
+# Genera el archivo final en la carpeta `ouput`
+# Si se quiere obtener las raíces de las palabras unicamente
+# se utiliza el parametro `--root|-r`
+python3 parse.py -i input/andrade.txt [-r|--root]
 
-# Ranking de palabras mas usadas
+# CONTEO DE REPETICIONES DE PALABRAS
 # Busca el input en la carpeta `ouput` generada con parse.py
-python3 count.py -i output/andrade.txt --rank
+# Si se indica --rank, se genera el archivo ordenado de mayor a menor
+python3 count.py -i output/andrade.txt [--rank]
 
-# Armar la nube de palabras
+# NUBE DE PALABRAS
 # Busca el input en la carpeta `ouput` generada con parse.py
-python3 cloud.py -i output/andrade.txt
+# Si se indica mascara, además se genera la nube con dicha imagen
+python3 cloud.py -i output/andrade.txt [-m input/andrade.png]
 
-# Armar la nube de palabras utilizando una mascara
-# Busca el input en la carpeta `ouput` generada con parse.py
-python3 cloud.py -i output/andrade.txt -m input/andrade.png
-
-# ONE-LINE-COMMAND
-FILE=andrade && python3 parse.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE.txt && python3 count.py -i $FILE.txt -o $FILE-rank.txt --rank && python3 summary.py -i $FILE.txt -o $FILE.txt && python3 cloud.py -i $FILE.txt -o $FILE.png
+# TODOS LOS COMANDOS JUNTOS
+# Si no se indica mascara (-m), se busca el mismo input con ".png"
+# si no existe, solo se crea la nube comun
+# Si se indica root, se generan los conteos y nube para las familias de palabras
+python3 all.py -i input/andrade.txt [-m input/andrade.png] [-r|--root]
 ```
 
 ## Pedidos y sugerencias

@@ -67,7 +67,7 @@ def analyzeSentiment(input):
                 score['pos'],
                 score['neg'],
                 score['neu'],
-                sentence,
+                " ".join(sentence.split("\n")),
             ))
 
 
